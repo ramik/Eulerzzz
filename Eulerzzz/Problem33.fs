@@ -14,10 +14,21 @@ let toReverseInt x =
 
 let isPalindrome x = match x with | (a, b) when a = toReverseInt b -> true  
                                   | _ -> false
+
+let canBeSimplified x = let a =  Array.toSeq ((fst x).ToString().ToCharArray())
+                        let b =  Array.toSeq ((snd x).ToString().ToCharArray())
+                        Seq.exists (fun c -> Seq.exists (fun t -> c=t) b) a
       
 module problem1UnitTests = 
-
   open Xunit
+
+  let canBeSimplifiedCheckingOnSimplifiable =
+    let candidates = [(11, 21);(76, 96);(17, 74);(49, 98)]
+    Assert.Equal(4, candidates |> Seq.filter canBeSimplified |> Seq.length)
+  
+  let canBeSimplifiedCheckingOnNNonSimplifiable =
+    let candidates = [(11, 22);(76, 99);(17, 84);(58, 97)]
+    Assert.Equal(0, candidates |> Seq.filter canBeSimplified |> Seq.length)
 
   let trivialityCheckingOnTrivials =
     let candidates = [(10, 20);(70, 80);(17, 70);(70, 97)]
