@@ -18,9 +18,24 @@ let isPalindrome x = match x with | (a, b) when a = toReverseInt b -> true
 let canBeSimplified x = let a =  Array.toSeq ((fst x).ToString().ToCharArray())
                         let b =  Array.toSeq ((snd x).ToString().ToCharArray())
                         Seq.exists (fun c -> Seq.exists (fun t -> c=t) b) a
+
+let simplify x = let rec simplifyInternal first second = 
+                              let a = first % 10
+                              let b = second % 10
+                              let c = first / 10
+                              let d = second / 10
+                              printfn "%i %i %i %i" a b c d
+                              match a, b, c, d with | _ when a = b -> (c, d) 
+                                                    | _ when c = d-> (a, b)
+                                                    | _ -> simplifyInternal (toReverseInt first) second
+                 simplifyInternal (fst x) (snd x)
       
-module problem1UnitTests = 
+module problem33Unitests = 
   open Xunit
+
+  let simplificationOnSimpliables =
+      let toSimplify = [(14, 24);(47, 94);(19, 94); (81, 82)]
+      Assert.Equal ([(1,2);(7,9);(1,4);(1,2)], List.map simplify toSimplify)
 
   let canBeSimplifiedCheckingOnSimplifiable =
     let candidates = [(11, 21);(76, 96);(17, 74);(49, 98)]
@@ -49,15 +64,6 @@ module problem1UnitTests =
   let isPalindromeCheckOnNonPalindromes =
     let candidates = [(89, 99); (11, 12); (55, 75)]
     Assert.Equal(0, Seq.filter isPalindrome candidates |> Seq.length)
-
-  [<Fact>] 
-  let trivialityCheckingOnTrivialsGUI() = trivialityCheckingOnTrivials
-
-  [<Fact>] 
-  let trivialityCheckingOnNonTrivialsGUI() = trivialityCheckingOnNonTrivials
-
-  [<Fact>] 
-  let intReversingGUI() = intReversing
 
 module printSolution =
   printfn "%s" "not done"
