@@ -12,8 +12,8 @@ let toReverseInt x =
     let toReverseIntInternal (y : string) = y.ToCharArray() |> Array.rev |> Array.fold (fun acc a -> String.Format("{0}{1}", acc, a)) ""
     Int32.Parse(toReverseIntInternal (x.ToString()))
 
-let isPalindrome x = match x with | (a, b) when a = toReverseInt b -> true  
-                                  | _ -> false
+let isPalindrome (x : (int*int)) = match x with | (a, b) when a = toReverseInt b -> true  
+                                                | _ -> false
 
 let canBeSimplified x = let a =  Array.toSeq ((fst x).ToString().ToCharArray())
                         let b =  Array.toSeq ((snd x).ToString().ToCharArray())
@@ -37,7 +37,10 @@ let generateFractions max =
                         | _ when x = y -> generateFractionsInternal 10 (y + 1) result
                         | _ -> generateFractionsInternal (x + 1) y (Seq.append result [(x,y)])
     generateFractionsInternal 10 11 Seq.empty
-      
+
+let findSolution = let fractions = generateFractions 100
+                   Seq.filter (wouldResultZeroAfterSimplification >> isPalindrome >> canBeSimplified) fractions
+
 module problem33Unitests = 
   open Xunit
 
