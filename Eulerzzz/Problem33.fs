@@ -12,7 +12,7 @@ let toReverseInt x =
     let toReverseIntInternal (y : string) = y.ToCharArray() |> Array.rev |> Array.fold (fun acc a -> String.Format("{0}{1}", acc, a)) ""
     Int32.Parse(toReverseIntInternal (x.ToString()))
 
-let isPalindrome (x : (int*int)) = match x with | (a, b) when a = toReverseInt b -> true  
+let isPalindrome x = match x with | (a, b) when a = toReverseInt b -> true  
                                                 | _ -> false
 
 let canBeSimplified x = let a =  Array.toSeq ((fst x).ToString().ToCharArray())
@@ -39,7 +39,16 @@ let generateFractions max =
     generateFractionsInternal 10 11 Seq.empty
 
 let findSolution = let fractions = generateFractions 100
-                   Seq.filter (wouldResultZeroAfterSimplification >> isPalindrome >> canBeSimplified) fractions
+                   let simplifiableFractions = fractions
+                                               |> Seq.filter (fun c -> (wouldResultZeroAfterSimplification c = false)) 
+                                               |> Seq.filter (fun c -> (isPalindrome c) = false)
+                                               |> Seq.filter canBeSimplified
+                   let resultFractions = simplifiableFractions |> Seq.map simplify |> Seq.zip simplifiableFractions
+                                                               |> Seq.filter (fun c -> areSame (fst c) (snd c))
+                                                               |> Seq.map (fun c -> (snd c))
+                   let nominator = resultFractions |> Seq.fold (fun acc c -> acc * (fst c)) 1 
+                   let denominator = resultFractions |> Seq.fold (fun acc c -> acc * (snd c)) 1 
+                   (nominator, denominator)                   
 
 module problem33Unitests = 
   open Xunit
@@ -88,5 +97,4 @@ module problem33Unitests =
     let candidates = [(89, 99); (11, 12); (55, 75)]
     Assert.Equal(0, Seq.filter isPalindrome candidates |> Seq.length)
 
-module printSolution =
-  printfn "%s" "not done"
+module printSolution = printfn "Solution's result is %A" findSolution
