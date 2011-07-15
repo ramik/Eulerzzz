@@ -24,14 +24,23 @@ let simplify x = let rec simplifyInternal first second =
                               let b = second % 10
                               let c = first / 10
                               let d = second / 10
-                              printfn "%i %i %i %i" a b c d
                               match a, b, c, d with | _ when a = b -> (c, d) 
                                                     | _ when c = d-> (a, b)
                                                     | _ -> simplifyInternal (toReverseInt first) second
                  simplifyInternal (fst x) (snd x)
+
+let areSame a b = (float (fst a)) / (float (snd a)) = (float (fst b)) / (float (snd b))
       
 module problem33Unitests = 
   open Xunit
+
+  let areSameReturnsTrueWhenSame =
+      let candidates = List.toSeq [((1,2), (2,4));((4,8),(49,98))]
+      Assert.True (Seq.forall (fun x -> areSame (fst x) (snd x)) candidates)
+
+  let areSameReturnsFalseWhenNotSame =
+      let candidates = List.toSeq [((1,2), (2,3));((3,8),(49,98))]
+      Assert.True (Seq.forall (fun x -> ((areSame (fst x) (snd x)) = false)) candidates)
 
   let simplificationOnSimpliables =
       let toSimplify = [(14, 24);(47, 94);(19, 94); (81, 82)]
