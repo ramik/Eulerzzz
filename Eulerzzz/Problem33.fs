@@ -30,9 +30,20 @@ let simplify x = let rec simplifyInternal first second =
                  simplifyInternal (fst x) (snd x)
 
 let areSame a b = (float (fst a)) / (float (snd a)) = (float (fst b)) / (float (snd b))
+
+let generateFractions max =
+    let rec generateFractionsInternal x y result =
+        match x, y with | _ when y = max -> result 
+                        | _ when x = y -> generateFractionsInternal 10 (y + 1) result
+                        | _ -> generateFractionsInternal (x + 1) y (Seq.append result [(x,y)])
+    generateFractionsInternal 10 11 Seq.empty
       
 module problem33Unitests = 
   open Xunit
+
+  let generateFractionsDoesFractionSeq =
+      let candidates = generateFractions 14
+      Assert.Equal ([(10, 11); (10, 12); (11,12);(10,13);(11,13);(12,13)], Seq.toList candidates)
 
   let areSameReturnsTrueWhenSame =
       let candidates = List.toSeq [((1,2), (2,4));((4,8),(49,98))]
