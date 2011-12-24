@@ -1,18 +1,24 @@
 ﻿module Primer
-
+(*
 #if INTERACTIVE
 #r @"..\lib\xunit.dll"
 #endif
+*)
 open System
 
-let private isPrime x = let rec Sieve x y = match x % y, sqrt x < y with
+let isPrime x = let rec Sieve x y = match x % y, sqrt x < y with
                                                  | (0.0, _) -> false           
                                                  | (_, true) -> true
                                                  | _ -> Sieve x (y + 2.0)
-                        Sieve x 3.0
+                match x, x % 2.0 with 
+                      | (2.0, _) -> true
+                      | (_, 0.0) -> false
+                      | (3.0, _) -> true
+                      |  _ -> Sieve x 3.0
+
 
 let private PrimesGreaterThan3 = seq { for i in 3.0 .. 2.0 .. System.Double.MaxValue do if(isPrime i) then yield i }
-let Primes = Seq.append {2.0..3.0} PrimesGreaterThan3
+let Primes = Seq.append ([2.0] |> List.toSeq) PrimesGreaterThan3
 
 module private PrimerUnitTests =
   open Xunit
