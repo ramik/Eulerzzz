@@ -11,6 +11,7 @@ let isPrime x = let rec Sieve x y = match x % y, sqrt x < y with
                                                  | (_, true) -> true
                                                  | _ -> Sieve x (y + 2.0)
                 match x, x % 2.0 with 
+                      | (a, _) when a < 2.0 -> false
                       | (2.0, _) -> true
                       | (_, 0.0) -> false
                       | (3.0, _) -> true
