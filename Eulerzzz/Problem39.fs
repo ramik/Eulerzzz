@@ -16,7 +16,13 @@ let getSidesForTriangle total =
   calc 1 2 (total - 3) []
 
 let isValidSideCombo (a,b,c) = pown a 2 + pown b 2 = pown c 2
-let a = isValidSideCombo (20, 30, 40)
+let calculatesSolutions x = x |> getSidesForTriangle |> List.filter isValidSideCombo |> List.length
+
+let result = Seq.initInfinite (fun c -> c + 1) |> Seq.takeWhile (fun c -> c < 1001) 
+                |> Seq.map (fun c -> (c, calculatesSolutions c))
+                |> Seq.maxBy (fun (_,c) -> c)
+
+                 
 
 module problem39Unitests = 
   open Xunit
