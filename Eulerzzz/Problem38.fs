@@ -13,7 +13,7 @@ let getConcanation x =
 let isDistinct x = x.ToString().ToCharArray() |> Seq.filter (fun c -> c <> '0') |> Seq.distinct |> Seq.length 
 let getProducts (a,b) = b |> Seq.map (fun c -> a*c) |> Seq.toList
 let result = Seq.initInfinite (fun c -> (c + 1, multipliers)) 
-                |> Seq.takeWhile (fun (c, _) -> c < 987654)
+                |> Seq.takeWhile (fun (c, _) -> c < 10000)
                 |> Seq.map (fun c -> getProducts c) |> Seq.map getConcanation 
                 |> Seq.filter (fun c -> c > 0)
                 |> Seq.filter (fun c -> isDistinct c = 9)
