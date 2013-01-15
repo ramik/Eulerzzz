@@ -6,33 +6,31 @@
 #endif
 
 open Primer
-
-let removeEven x = 
-    let rec removeEvenF y count = 
-        match y % 2L with
-        | 0L -> removeEvenF (y / 2L) (count + 1)
-        | _ -> (y, count)
-    removeEvenF x 0 
+open System
     
 let findFactors candidate =
-    let rec findFactorsF primes result = 
-        let prime = Seq.head primes
-        match prime, candidate with 
-        | a, b when a > b -> result
-        | a, b when b % a = 0.0 -> findFactorsF (Seq.skip 1 primes) (a :: result)
-        | _ -> findFactorsF (Seq.skip 1 primes) result
-    findFactorsF Primes []
+    let rec findFactorsF prime result = 
+        if(isPrime(prime) = false) then findFactorsF (prime + 2.0) result
+        else
+            match prime, candidate with 
+            | 2.0, a when a % 2.0 = 0.0 -> findFactorsF 3.0 (2.0 :: result)
+            | 2.0, _ -> findFactorsF 3.0 result
+            | a, b when a > b / 2.0 -> result
+            | a, b when b % a = 0.0 -> findFactorsF (candidate / prime) (a :: result)
+            | _ -> findFactorsF (prime + 2.0) result
+    findFactorsF 2.0 []
 
 let findResult =
     let rec findResultF count result x =
         let factors = findFactors x
+        if(x % 1000.0 = 0.0) then printfn "%A %A %A" count result x 
         match Seq.length factors, count with
-        | 4, 3 -> result
-        | 4, 0 -> findResultF 1 x (x + 1.0)
-        | 4, _ -> findResultF (count + 1) result (x + 1.0)
-        | _, _ -> findResultF 0 0.0 (x + 1.0)
+        | 3, 3 -> result
+        | 3, 1 -> findResultF (count + 1) x (x + 1.0)
+        | 3, _ -> findResultF (count + 1) result (x + 1.0)
+        | _, _ -> findResultF 1 0.0 (x + 1.0)
 
-    findResultF 0 0.0 10.0
+    findResultF 1 0.0 10.0
 
 // 14 = 2 x 7
 // 15 = 3 X 5
