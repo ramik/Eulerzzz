@@ -61,6 +61,7 @@
     <Compile Include="Problem47.fs" />
     <Compile Include="Problem48.fs" />
     <Compile Include="Problem407.fs" />
+    <Compile Include="Problem49.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
